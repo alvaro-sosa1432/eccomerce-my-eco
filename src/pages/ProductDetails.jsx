@@ -1,10 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { GetProductsById } from "../stack/GetProducts";
 import { Loader } from "../components/Loader";
+import { CategorySection } from "../components/CategorySection";
 
 export const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const { data: product, isPending, error } = GetProductsById(id);
 
   if (isPending) return <Loader />;
@@ -34,6 +36,9 @@ export const ProductDetails = () => {
             </div>
           </div>
         </section>
+      </article>
+      <article>
+        <CategorySection category={product.category} />
       </article>
     </main>
   );
