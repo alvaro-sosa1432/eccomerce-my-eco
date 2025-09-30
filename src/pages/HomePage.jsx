@@ -1,24 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { GetProducts } from "../stack/GetProducts";
 import { CardProduct } from "../components/CardProduct";
-import { Icon } from "@iconify/react";
+import { Loader } from "../components/Loader";
 
 export const HomePage = () => {
   const navigate = useNavigate();
 
   const { data, isPending, error } = GetProducts();
 
-  if (isPending)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Icon
-          className="text-red-400 w-20"
-          icon="line-md:loading-loop"
-          width="70"
-          height="70"
-        />
-      </div>
-    );
+  if (isPending) return <Loader />;
 
   if (error) return navigate("*");
 

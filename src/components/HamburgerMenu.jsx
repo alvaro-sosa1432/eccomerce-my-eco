@@ -1,11 +1,22 @@
 import { useState } from "react";
 import { Icon } from "@iconify/react";
-// import { Link, useLocation } from "react-router-dom";
+import { ButtonHamburgerLink } from "./ButtonHamburgerLink";
 
 export const HamburgerMenu = () => {
+  const links = [
+    {
+      to: "/",
+      icon: "bxs:home",
+      title: "Home",
+    },
+    {
+      to: "/productlist",
+      icon: "fluent-mdl2:product-list",
+      title: "Product List",
+    },
+  ];
+
   const [isOpen, setIsOpen] = useState(false);
-  // const location = useLocation();
-  // const currentPath = location.pathname;
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -42,30 +53,22 @@ export const HamburgerMenu = () => {
 
       {/* Menú desplegable */}
       <div
-        className={`absolute  -left-2 right-0 w-screen  h-screen min-[350px]:w-78  bg-gradient-to-r from-orange-500 to-orange-400   shadow-lg  z-50 transition-all duration-300 ease-in-out ${
+        className={`absolute  -left-2 right-0 w-screen  h-screen min-[350px]:w-62  bg-gradient-to-r from-orange-500 to-orange-400   shadow-lg  z-50 transition-all duration-300 ease-in-out ${
           isOpen
             ? "opacity-100 visible transform translate-x-0"
             : "opacity-0 invisible transform -translate-x-2"
         }`}
       >
         <div className="w-76">
-          <div className="flex flex-col gap-3 text-center p-4">
-            {/* {currentPath !== "/" && (
-              <Link to={`/`} className="">
-                Inicio
-              </Link>
-            )}
-
-            {currentPath !== "/characterlist" && (
-              <Link to={`/characterlist`} className="">
-                Mas Personajes
-              </Link>
-            )} */}
-            <a className="flex justify-center gap-2" href="">
-              <Icon icon="bxs:home" width="24" height="24" />
-              Home
-            </a>
-            <a href="">Productos</a>
+          <div className="flex flex-col justify-center items-start   ">
+            {links.map((link, index) => (
+              <ButtonHamburgerLink
+                key={index}
+                to={link.to}
+                icon={link.icon}
+                title={link.title}
+              />
+            ))}
           </div>
         </div>
       </div>

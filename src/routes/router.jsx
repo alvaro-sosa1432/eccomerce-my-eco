@@ -3,6 +3,7 @@ import { MainLayout } from "../layout/MainLayout";
 import { HomePage } from "../pages/HomePage";
 import { NotFound } from "../pages/NotFound";
 import { ProductDetails } from "../pages/ProductDetails";
+import { ProductList } from "../pages/ProductList";
 
 export const EccommerceRoute = () => {
   return (
@@ -10,7 +11,8 @@ export const EccommerceRoute = () => {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="product/:id" element={<ProductDetails />} />
+          <Route path="/productlist" element={<ProductList />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
