@@ -13,7 +13,7 @@ export const HomePage = () => {
   if (error) return navigate("*");
 
   return (
-    <div className="md:max-w-2xl lg:max-w-3xl mx-auto">
+    <div className="md:max-w-2xl lg:max-w-4xl mx-auto">
       <section className="flex justify-center mx-auto mt-14  h-[300px]  ">
         <div className="bg-[url(/banner.jpg)] h-full  bg-no-repeat bg-cover w-full sm:rounded-b-lg  flex justify-center items-center ">
           <div className="flex flex-col gap-4 justify-center items-center">

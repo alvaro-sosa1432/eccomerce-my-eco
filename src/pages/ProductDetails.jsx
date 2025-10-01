@@ -38,7 +38,7 @@ export const ProductDetails = () => {
         </section>
       </article>
       <article>
-        <CategorySection category={product.category} />
+        <CategorySection category={product.category} id={product.id} />
       </article>
     </main>
   );

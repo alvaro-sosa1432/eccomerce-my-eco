@@ -11,13 +11,18 @@ export const CardProduct = ({ id, title, price, image }) => {
   };
 
   return (
-    <article className="flex flex-col   items-center justify-center mx-auto w-full rounded-lg  h-96 border border-transparent hover:border-orange-300 transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02 ">
+    <article className="flex flex-col   items-center justify-center mx-auto  w-full rounded-lg  h-96 border border-transparent sm:hover:border-orange-300 transition-all duration-300 ease-in-out sm:hover:shadow-lg sm:hover:scale-[1.02] ">
       <Link
         to={`/product/${id}`}
         className="flex flex-col justify-center items-center    "
       >
-        <img className="w-11/12 p-4 h-50" src={image} alt={title} />
-        <div className="flex justify-end w-full p-2 relative z-index cursor-pointer">
+        <img
+          loading="lazy"
+          className="w-[200px] p-4 h-[200px]"
+          src={image}
+          alt={title}
+        />
+        <div className="flex justify-end w-full p-2 relative  cursor-pointer">
           <Icon
             className="absolute -top-3 p-2 text-orange-400 z-0 hover:bg-orange-400 hover:text-white rounded-lg transition-colors duration-300  "
             icon="tdesign:cart-add-filled"

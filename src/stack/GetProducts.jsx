@@ -36,3 +36,14 @@ export const GetProductsByCategory = (category) => {
     },
   });
 };
+
+export const GetAllProducts = () => {
+  return useQuery({
+    queryKey: ["Listado de productos"],
+    queryFn: async () => {
+      const response = await fetch(`https://fakestoreapi.com/products`);
+      if (!response.ok) throw new Error("Error Al Cargar los productos");
+      return response.json();
+    },
+  });
+};
