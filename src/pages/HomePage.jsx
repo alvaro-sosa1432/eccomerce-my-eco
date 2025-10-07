@@ -26,7 +26,7 @@ export const HomePage = () => {
           </div>
         </div>
       </section>
-      <section className=" mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center items-center gap-4 ">
+      <section className=" my-10  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center items-center gap-4 ">
         {data?.map((product) => (
           <div className=" mx-auto " key={product.id}>
             <CardProduct

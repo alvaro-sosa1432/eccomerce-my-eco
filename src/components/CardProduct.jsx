@@ -1,6 +1,8 @@
 import { ButtonDetails } from "./ButtonDetails";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";
+import { Loader } from "./Loader";
 
 export const CardProduct = ({ id, title, price, image }) => {
   const cortarTitulo = (titulo, maxPalabras = 5) => {
@@ -11,16 +13,20 @@ export const CardProduct = ({ id, title, price, image }) => {
   };
 
   return (
-    <article className="flex flex-col   items-center justify-center mx-auto  w-full rounded-lg  h-96 border border-transparent sm:hover:border-orange-300 transition-all duration-300 ease-in-out sm:hover:shadow-lg sm:hover:scale-[1.02] ">
+    <article className="flex flex-col  items-center justify-center mx-auto rounded-lg     h-96  ">
       <Link
         to={`/product/${id}`}
         className="flex flex-col justify-center items-center    "
       >
-        <img
+        <LazyLoadImage
           loading="lazy"
-          className="w-[200px] p-4 h-[200px]"
+          decoding="async"
+          className=" p-4 h-auto "
+          width={200}
+          height={200}
           src={image}
           alt={title}
+          placeholder={<Loader />}
         />
         <div className="flex justify-end w-full p-2 relative  cursor-pointer">
           <Icon

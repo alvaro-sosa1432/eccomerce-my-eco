@@ -37,11 +37,11 @@ export const GetProductsByCategory = (category) => {
   });
 };
 
-export const GetAllProducts = () => {
+export const GetAllProducts = (title) => {
   return useQuery({
-    queryKey: ["Listado de productos"],
+    queryKey: ["Listado de productos", title],
     queryFn: async () => {
-      const response = await fetch(`https://fakestoreapi.com/products`);
+      const response = await fetch(`https://fakestoreapi.com/products/`);
       if (!response.ok) throw new Error("Error Al Cargar los productos");
       return response.json();
     },
