@@ -13,8 +13,8 @@ export const EccommerceRoute = () => {
           <Route index element={<HomePage />} />
           <Route path="product/:id" element={<ProductDetails />} />
           <Route path="/productlist" element={<ProductList />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
-        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

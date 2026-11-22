@@ -1,85 +1,64 @@
-import { useState } from "react";
-import { Icon } from "@iconify/react";
-import { ButtonHamburgerLink } from "./ButtonHamburgerLink";
+import { useEffect, useRef, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 
 export const HamburgerMenu = () => {
-  const links = [
-    {
-      to: "/",
-      icon: "bxs:home",
-      title: "Home",
-    },
-    {
-      to: "/productlist",
-      icon: "fluent-mdl2:product-list",
-      title: "Product List",
-    },
-  ];
+  const { key } = useLocation();
+  const [openLocation, setOpenLocation] = useState(null);
+  const isOpen = openLocation === key;
+  const container = useRef(null);
+  const button = useRef(null);
 
-  const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    if (!isOpen) return;
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    const closeOutside = (event) => {
+      if (!container.current?.contains(event.target)) setOpenLocation(null);
+    };
+    const closeOnEscape = (event) => {
+      if (event.key !== "Escape") return;
+      setOpenLocation(null);
+      button.current?.focus();
+    };
+
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("focusin", closeOutside);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("focusin", closeOutside);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isOpen]);
+
+  const selectRoute = () => {
+    button.current?.focus();
+    setOpenLocation(null);
   };
 
   return (
-    <div className="relative text-white  ">
+    <div ref={container} className="md:hidden">
       <button
-        onClick={toggleMenu}
-        className="p-4 focus:outline-none "
-        aria-label="Menú principal"
+        ref={button}
+        type="button"
+        onClick={() => setOpenLocation(isOpen ? null : key)}
+        className="button button-secondary w-11 px-0"
+        aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
         aria-expanded={isOpen}
+        aria-controls="mobile-navigation"
       >
-        <div className="w-6 h-6 flex items-center ">
-          <div className="">
-            {isOpen ? (
-              <Icon
-                className="cursor-pointer text-white p-2  rounded-full transition-all duration-300 "
-                icon="maki:cross"
-                width="50"
-                height="50"
-              />
-            ) : (
-              <Icon
-                className="cursor-pointer text-white p-2   rounded-full transition-colors duration-300 "
-                icon="line-md:menu"
-                width="50"
-                height="50"
-              />
-            )}
-          </div>
-        </div>
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+          <path d={isOpen ? "M6 6l12 12M18 6 6 18" : "M4 6h16M4 12h16M4 18h16"} />
+        </svg>
       </button>
-
-      {/* Menú desplegable */}
-      <div
-        className={`absolute  -left-2 right-0 w-screen  h-screen min-[350px]:w-62  bg-gradient-to-r from-orange-500 to-orange-400   shadow-lg  z-50 transition-all duration-300 ease-in-out ${
-          isOpen
-            ? "opacity-100 visible transform translate-x-0"
-            : "opacity-0 invisible transform -translate-x-2"
-        }`}
+      <nav
+        id="mobile-navigation"
+        aria-label="Navegación principal"
+        hidden={!isOpen}
+        className="panel absolute inset-x-4 top-full z-10 space-y-1 p-2 shadow-lg sm:inset-x-auto sm:right-6 sm:w-60"
       >
-        <div className="w-76">
-          <div className="flex flex-col justify-center items-start   ">
-            {links.map((link, index) => (
-              <ButtonHamburgerLink
-                key={index}
-                to={link.to}
-                icon={link.icon}
-                title={link.title}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Overlay para cerrar al hacer clic fuera del menú */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-40  bg-opacity-10"
-          onClick={() => setIsOpen(false)}
-        ></div>
-      )}
+        <NavLink to="/" end className="nav-link w-full" onClick={selectRoute}>Inicio</NavLink>
+        <NavLink to="/productlist" className="nav-link w-full" onClick={selectRoute}>Productos</NavLink>
+      </nav>
     </div>
   );
 };

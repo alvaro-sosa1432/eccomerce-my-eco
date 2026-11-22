@@ -1,45 +1,54 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { GetProductsById } from "../stack/GetProducts";
 import { Loader } from "../components/Loader";
 import { CategorySection } from "../components/CategorySection";
+import { QueryError } from "../components/QueryError";
+import { categoryLabel, formatPrice } from "../utils/products";
 
 export const ProductDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-
-  const { data: product, isPending, error } = GetProductsById(id);
-
-  if (isPending) return <Loader />;
-
-  if (error) return navigate("*");
+  const { data: product, isPending, isError, isFetching, refetch } = GetProductsById(id);
 
   return (
-    <main className="  mx-auto h-screen max-w-2xl  ">
-      <article className="w-full mt-18  ">
-        <section className="grid grid-cols-1 sm:grid-cols-2 justify-between items-center gap-2">
-          <div className="mx-auto flex justify-center">
-            <img className="w-9/12" src={product.image} alt={product.title} />
-          </div>
-          <div className=" text-orange-400 flex flex-col items-start gap-4 h-full sm:border border-orange-200 p-4 rounded-lg  ">
-            <div className="flex flex-col gap-2 p-4">
-              <h1 className="text-2xl font-bold ">{product.title}</h1>
-              <span className="font-semibold text-xl">{product.price} $</span>
+    <div className="shell py-7 sm:py-10">
+      <Link to="/productlist" className="button button-secondary mb-6">
+        <span aria-hidden="true">←</span> Volver a productos
+      </Link>
+
+      {isPending ? (
+        <Loader variant="detail" />
+      ) : isError && !product ? (
+        <QueryError message="No pudimos cargar el producto." retry={() => refetch()} isFetching={isFetching} />
+      ) : !product ? (
+        <div className="state-panel">
+          <h1 className="section-title">Producto no encontrado</h1>
+          <p className="text-muted">Volvé al catálogo para seguir explorando.</p>
+        </div>
+      ) : (
+        <>
+          <article className="detail-grid">
+            <div className="product-media aspect-[5/4] rounded-2xl border border-line">
+              <img
+                src={product.image}
+                alt={product.title}
+                className="product-image p-8 sm:p-14"
+                width="600"
+                height="480"
+              />
             </div>
-            <div className=" flex flex-col h-full  items-center justify-center mx-auto p-4 gap-4  ">
-              <span className="uppercase font-semibold ">
-                {product.category}
-              </span>
-              <p>{product.description}</p>
-              <button className="bg-orange-400 w-full text-white rounded-lg p-2 hover:bg-orange-500 cursor-pointer transition-colors duration-300 ">
-                Add Cart
-              </button>
+            <div className="panel min-w-0 p-6 sm:p-8">
+              <p className="inline-flex rounded-full bg-tint px-3 py-1 text-xs font-semibold text-action">{categoryLabel(product.category)}</p>
+              <h1 className="mt-4 text-3xl leading-tight font-bold tracking-tight wrap-anywhere lg:text-4xl">{product.title}</h1>
+              <p className="mt-4 text-2xl font-bold tracking-tight">{formatPrice(product.price)}</p>
+              <div className="mt-6 border-t border-line pt-5">
+                <h2 className="mb-2 font-semibold">Descripción</h2>
+                <p className="leading-relaxed wrap-anywhere text-muted">{product.description}</p>
+              </div>
             </div>
-          </div>
-        </section>
-      </article>
-      <article>
-        <CategorySection category={product.category} id={product.id} />
-      </article>
-    </main>
+          </article>
+          <CategorySection category={product.category} id={product.id} />
+        </>
+      )}
+    </div>
   );
 };

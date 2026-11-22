@@ -1,49 +1,36 @@
 import { useQuery } from "@tanstack/react-query";
 
-export const GetProducts = () => {
-  const fetchProducts = async () => {
-    const response = await fetch("https://fakestoreapi.com/products?limit=6");
-    return response.json();
-  };
+const productsUrl = "https://fakestoreapi.com/products";
 
-  return useQuery({
-    queryKey: ["Mostrando Productos"],
-    queryFn: fetchProducts,
-  });
+const fetchProducts = async (path, signal, allowMissing = false) => {
+  const response = await fetch(`${productsUrl}${path}`, { signal });
+  if (allowMissing && (response.status === 404 || response.status === 204)) return null;
+  if (!response.ok) throw new Error("No se pudieron cargar los productos");
+  const body = await response.text();
+  return allowMissing && !body.trim() ? null : JSON.parse(body);
 };
 
-export const GetProductsById = (id) => {
-  return useQuery({
-    queryKey: ["product", id],
-    queryFn: async () => {
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-      if (!response.ok) throw new Error("Error al cargar el producto");
-      return response.json();
-    },
-    enabled: !!id,
-  });
-};
+export const GetProducts = () => useQuery({
+  queryKey: ["Mostrando Productos"],
+  queryFn: ({ signal }) => fetchProducts("?limit=6", signal),
+});
 
-export const GetProductsByCategory = (category) => {
-  return useQuery({
-    queryKey: ["Product category", category],
-    queryFn: async () => {
-      const response = await fetch(
-        `https://fakestoreapi.com/products/category/${category}?limit=3`
-      );
-      if (!response.ok) throw new Error("Error al cargar el producto");
-      return response.json();
-    },
-  });
-};
+export const GetProductsById = (id) => useQuery({
+  queryKey: ["product", id],
+  queryFn: async ({ signal }) => {
+    const product = await fetchProducts(`/${encodeURIComponent(id)}`, signal, true);
+    return product?.id ? product : null;
+  },
+  enabled: !!id,
+});
 
-export const GetAllProducts = (title) => {
-  return useQuery({
-    queryKey: ["Listado de productos", title],
-    queryFn: async () => {
-      const response = await fetch(`https://fakestoreapi.com/products/`);
-      if (!response.ok) throw new Error("Error Al Cargar los productos");
-      return response.json();
-    },
-  });
-};
+export const GetProductsByCategory = (category) => useQuery({
+  queryKey: ["Product category", category],
+  queryFn: ({ signal }) => fetchProducts(`/category/${encodeURIComponent(category)}?limit=3`, signal),
+  enabled: !!category,
+});
+
+export const GetAllProducts = (title) => useQuery({
+  queryKey: ["Listado de productos", title],
+  queryFn: ({ signal }) => fetchProducts("/", signal),
+});

@@ -1,49 +1,24 @@
 import { ButtonDetails } from "./ButtonDetails";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Icon } from "@iconify/react";
-import { Link } from "react-router-dom";
-import { Loader } from "./Loader";
+import { categoryLabel, formatPrice } from "../utils/products";
 
-export const CardProduct = ({ id, title, price, image }) => {
-  const cortarTitulo = (titulo, maxPalabras = 5) => {
-    const palabras = titulo.split(" ");
-    return palabras.length > maxPalabras
-      ? palabras.slice(0, maxPalabras).join(" ") + "..."
-      : titulo;
-  };
-
-  return (
-    <article className="flex flex-col  items-center justify-center mx-auto rounded-lg     h-96  ">
-      <Link
-        to={`/product/${id}`}
-        className="flex flex-col justify-center items-center    "
-      >
-        <LazyLoadImage
-          loading="lazy"
-          decoding="async"
-          className=" p-4 h-auto "
-          width={200}
-          height={200}
-          src={image}
-          alt={title}
-          placeholder={<Loader />}
-        />
-        <div className="flex justify-end w-full p-2 relative  cursor-pointer">
-          <Icon
-            className="absolute -top-3 p-2 text-orange-400 z-0 hover:bg-orange-400 hover:text-white rounded-lg transition-colors duration-300  "
-            icon="tdesign:cart-add-filled"
-            width="40"
-            height="40"
-          />
-        </div>
-      </Link>
-      <div className="flex flex-col justify-center items-center gap-2 text-center  p-2 text-orange-400 ">
-        <h1 className="text-center text-xs font-bold line-clamp-2 ">
-          {cortarTitulo(title)}
-        </h1>
-        <p className="font-semibold">{price}$</p>
-        <ButtonDetails id={id} />
-      </div>
-    </article>
-  );
-};
+export const CardProduct = ({ id, title, price, image, category }) => (
+  <article className="panel flex min-w-0 flex-col p-3 hover:border-stone-300 hover:shadow-sm motion-safe:transition-[border-color,box-shadow]">
+    <div className="product-media aspect-[5/4] rounded-xl">
+      <img
+        className="product-image p-5 sm:p-7"
+        width="240"
+        height="192"
+        src={image}
+        alt={title}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <div className="flex flex-1 flex-col px-1 pt-4 pb-1">
+      <p className="mb-1.5 text-xs font-semibold text-action">{categoryLabel(category)}</p>
+      <h3 className="line-clamp-2 min-h-11 text-sm leading-[1.375rem] font-semibold wrap-anywhere" title={title}>{title}</h3>
+      <p className="mt-3 mb-4 text-lg font-bold tracking-tight tabular-nums">{formatPrice(price)}</p>
+      <div className="mt-auto"><ButtonDetails id={id} title={title} /></div>
+    </div>
+  </article>
+);

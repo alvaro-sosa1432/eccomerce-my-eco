@@ -1,6 +1,41 @@
 @import "tailwindcss";
 
 @theme {
-  --color-orange-light: #ff903e;
-  --color-orange-dark: #fe7a1f;
+  --color-canvas: #fafaf9;
+  --color-ink: #18181b;
+  --color-muted: #62626b;
+  --color-line: #e7e5e4;
+  --color-accent: #ea580c;
+  --color-action: #c2410c;
+  --color-tint: #fff1e7;
+  --animate-skeleton: skeleton 2.4s ease-in-out infinite;
+
+  @keyframes skeleton {
+    50% { opacity: 0.72; }
+  }
+}
+
+@layer base {
+  html { color-scheme: light; }
+  body { @apply bg-canvas text-ink antialiased; }
+  :focus-visible { @apply outline-2 outline-offset-4 outline-action; }
+}
+
+@layer components {
+  .shell { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+  .section-title { @apply text-2xl font-bold tracking-tight sm:text-3xl; }
+  .button {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold motion-safe:transition-colors;
+  }
+  .button-primary { @apply bg-action text-white hover:bg-orange-900; }
+  .button-secondary { @apply border border-line bg-white text-ink hover:border-orange-200 hover:bg-tint hover:text-action; }
+  .nav-link { @apply inline-flex min-h-11 items-center rounded-xl px-4 text-sm font-semibold text-muted hover:bg-canvas hover:text-ink; }
+  .nav-link[aria-current="page"] { @apply bg-tint text-action; }
+  .product-grid { @apply grid grid-cols-1 gap-5 min-[520px]:grid-cols-2 md:grid-cols-3; }
+  .detail-grid { @apply grid items-start gap-6 md:grid-cols-2 lg:gap-10; }
+  .product-media { @apply relative min-w-0 bg-stone-100; }
+  .product-image { @apply absolute inset-0 h-full w-full object-contain mix-blend-multiply; }
+  .panel, .state-panel { @apply rounded-2xl border border-line bg-white; }
+  .field { @apply min-h-12 w-full min-w-0 rounded-xl border border-stone-400 bg-white px-3 text-sm; }
+  .state-panel { @apply flex flex-col items-start gap-3 p-5 sm:p-7; }
 }
