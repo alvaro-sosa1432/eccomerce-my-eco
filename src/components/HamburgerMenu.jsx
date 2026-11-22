@@ -1,7 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
+import { AccountNavigation } from "./AccountNavigation";
+import { CartIcon } from "./AddToCartButton";
+import { ThemeToggle } from "./ThemeToggle";
+import { HeartIcon } from "./WishlistButton";
+import { useAuth } from "../auth/useAuth";
+import { useCart } from "../hooks/useCart";
+import { useWishlist } from "../hooks/useWishlist";
+
 export const HamburgerMenu = () => {
+  const { isAuthenticated } = useAuth();
+  const { data: favorites } = useWishlist();
+  const { data: cart } = useCart();
+  const units = cart?.reduce((total, { quantity }) => total + quantity, 0) ?? 0;
   const { key } = useLocation();
   const [openLocation, setOpenLocation] = useState(null);
   const isOpen = openLocation === key;
@@ -31,17 +43,17 @@ export const HamburgerMenu = () => {
   }, [isOpen]);
 
   const selectRoute = () => {
-    button.current?.focus();
+    if (isOpen) button.current?.focus();
     setOpenLocation(null);
   };
 
   return (
-    <div ref={container} className="md:hidden">
+    <div ref={container} className="lg:contents">
       <button
         ref={button}
         type="button"
         onClick={() => setOpenLocation(isOpen ? null : key)}
-        className="button button-secondary w-11 px-0"
+        className="button button-secondary w-11 px-0 lg:hidden"
         aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
         aria-expanded={isOpen}
         aria-controls="mobile-navigation"
@@ -53,11 +65,32 @@ export const HamburgerMenu = () => {
       <nav
         id="mobile-navigation"
         aria-label="Navegación principal"
-        hidden={!isOpen}
-        className="panel absolute inset-x-4 top-full z-10 space-y-1 p-2 shadow-lg sm:inset-x-auto sm:right-6 sm:w-60"
+        className={`${isOpen ? "flex" : "hidden"} panel absolute inset-x-4 top-full z-10 flex-col gap-1 p-2 shadow-lg sm:inset-x-auto sm:right-6 sm:w-60 lg:static lg:flex lg:w-auto lg:min-w-0 lg:flex-1 lg:flex-row lg:items-center lg:gap-2 xl:gap-4 lg:border-0 lg:p-0 lg:shadow-none`}
       >
-        <NavLink to="/" end className="nav-link w-full" onClick={selectRoute}>Inicio</NavLink>
-        <NavLink to="/productlist" className="nav-link w-full" onClick={selectRoute}>Productos</NavLink>
+        <div className="flex flex-col gap-1 lg:mx-auto lg:flex-row">
+          <NavLink to="/" end className="nav-link lg:px-2 xl:px-4" onClick={selectRoute}>Inicio</NavLink>
+          <NavLink to="/productlist" className="nav-link lg:px-2 xl:px-4" onClick={selectRoute}>Productos</NavLink>
+          <NavLink to="/wishlist" className="nav-link gap-2 lg:px-2 xl:px-4" onClick={selectRoute}>
+            <HeartIcon />
+            Favoritos
+            {isAuthenticated && favorites && (
+              <span className="rounded-full bg-tint px-2 py-0.5 text-xs font-semibold tabular-nums text-action">
+                {favorites.length}
+              </span>
+            )}
+          </NavLink>
+          <NavLink to="/cart" className="nav-link gap-2 lg:px-2 xl:px-4" onClick={selectRoute}>
+            <CartIcon />
+            Carrito
+            {isAuthenticated && units > 0 && (
+              <span className="rounded-full bg-tint px-2 py-0.5 text-xs font-semibold tabular-nums text-action">
+                {units}
+              </span>
+            )}
+          </NavLink>
+        </div>
+        <AccountNavigation onSelect={selectRoute} />
+        <ThemeToggle />
       </nav>
     </div>
   );

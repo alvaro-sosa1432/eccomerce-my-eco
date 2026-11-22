@@ -3,6 +3,8 @@ import { GetProductsById } from "../stack/GetProducts";
 import { Loader } from "../components/Loader";
 import { CategorySection } from "../components/CategorySection";
 import { QueryError } from "../components/QueryError";
+import { AddToCartButton } from "../components/AddToCartButton";
+import { WishlistButton } from "../components/WishlistButton";
 import { categoryLabel, formatPrice } from "../utils/products";
 
 export const ProductDetails = () => {
@@ -39,7 +41,13 @@ export const ProductDetails = () => {
             <div className="panel min-w-0 p-6 sm:p-8">
               <p className="inline-flex rounded-full bg-tint px-3 py-1 text-xs font-semibold text-action">{categoryLabel(product.category)}</p>
               <h1 className="mt-4 text-3xl leading-tight font-bold tracking-tight wrap-anywhere lg:text-4xl">{product.title}</h1>
-              <p className="mt-4 text-2xl font-bold tracking-tight">{formatPrice(product.price)}</p>
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+                <p className="text-2xl font-bold tracking-tight">{formatPrice(product.price)}</p>
+                <WishlistButton productId={product.id} productTitle={product.title} />
+              </div>
+              <div className="mt-5 sm:max-w-xs">
+                <AddToCartButton productId={product.id} productTitle={product.title} primary />
+              </div>
               <div className="mt-6 border-t border-line pt-5">
                 <h2 className="mb-2 font-semibold">Descripción</h2>
                 <p className="leading-relaxed wrap-anywhere text-muted">{product.description}</p>

@@ -9,7 +9,7 @@ export const HomePage = () => {
 
   return (
     <div className="shell pt-6 pb-16 sm:pt-9 lg:pt-12">
-      <section className="grid overflow-hidden rounded-2xl border border-line bg-[#f5eee7] md:grid-cols-[1fr_1fr]">
+      <section className="grid overflow-hidden rounded-2xl border border-line bg-banner md:grid-cols-[1fr_1fr]">
         <div className="flex flex-col items-start justify-center px-6 py-10 sm:px-10 lg:px-14 lg:py-16">
           <h1 className="max-w-[12ch] text-4xl leading-[1.05] font-bold tracking-[-0.05em] sm:text-5xl lg:text-6xl">
             Encontrá algo para <span className="text-action">cada día</span>
@@ -21,7 +21,7 @@ export const HomePage = () => {
             Explorar productos <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className="relative min-h-48 overflow-hidden bg-[#f3d1bd] sm:min-h-60 md:min-h-0">
+        <div className="relative min-h-48 overflow-hidden bg-banner-media sm:min-h-60 md:min-h-0">
           <img
             src={`${import.meta.env.BASE_URL}banner-hero.webp`}
             alt=""

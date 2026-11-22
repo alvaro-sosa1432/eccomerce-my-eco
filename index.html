@@ -3,10 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      try {
+        const theme = localStorage.getItem("myeco-theme");
+        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      } catch {
+        // CSS follows the system preference when storage is unavailable.
+      }
+    </script>
     <title>MyEccommerce</title>
   </head>
   <body>
     <div id="root"></div>
+    <div id="commerce-notifications"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

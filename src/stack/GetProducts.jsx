@@ -30,7 +30,8 @@ export const GetProductsByCategory = (category) => useQuery({
   enabled: !!category,
 });
 
-export const GetAllProducts = (title) => useQuery({
+export const GetAllProducts = (title, { enabled = true } = {}) => useQuery({
   queryKey: ["Listado de productos", title],
   queryFn: ({ signal }) => fetchProducts("/", signal),
+  enabled,
 });

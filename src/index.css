@@ -1,13 +1,27 @@
 @import "tailwindcss";
 
+@theme inline {
+  --color-canvas: var(--mc-canvas);
+  --color-surface: var(--mc-surface);
+  --color-surface-alt: var(--mc-surface-alt);
+  --color-ink: var(--mc-ink);
+  --color-muted: var(--mc-muted);
+  --color-line: var(--mc-line);
+  --color-line-strong: var(--mc-line-strong);
+  --color-accent: var(--mc-accent);
+  --color-action: var(--mc-action);
+  --color-action-bg: var(--mc-action-bg);
+  --color-action-hover: var(--mc-action-hover);
+  --color-on-action: var(--mc-on-action);
+  --color-tint: var(--mc-tint);
+  --color-banner: var(--mc-banner);
+  --color-banner-media: var(--mc-banner-media);
+  --color-skeleton: var(--mc-skeleton);
+  --color-danger: var(--mc-danger);
+  --color-danger-surface: var(--mc-danger-surface);
+}
+
 @theme {
-  --color-canvas: #fafaf9;
-  --color-ink: #18181b;
-  --color-muted: #62626b;
-  --color-line: #e7e5e4;
-  --color-accent: #ea580c;
-  --color-action: #c2410c;
-  --color-tint: #fff1e7;
   --animate-skeleton: skeleton 2.4s ease-in-out infinite;
 
   @keyframes skeleton {
@@ -16,7 +30,37 @@
 }
 
 @layer base {
-  html { color-scheme: light; }
+  :root {
+    color-scheme: light dark;
+    --mc-canvas: light-dark(#fafaf9, #111113);
+    --mc-surface: light-dark(#ffffff, #1c1c1f);
+    --mc-surface-alt: light-dark(#f5f5f4, #29292d);
+    --mc-ink: light-dark(#18181b, #fafaf9);
+    --mc-muted: light-dark(#71717a, #a1a1aa);
+    --mc-line: light-dark(#e7e5e4, #333338);
+    --mc-line-strong: light-dark(#868681, #74747e);
+    --mc-accent: light-dark(#ea580c, #fb923c);
+    --mc-action: light-dark(#9a3412, #fb923c);
+    --mc-action-bg: light-dark(#c2410c, #fb923c);
+    --mc-action-hover: light-dark(#9a3412, #fdba74);
+    --mc-on-action: light-dark(#ffffff, #18181b);
+    --mc-tint: light-dark(#fff1e7, #39261c);
+    --mc-banner: light-dark(#f5eee7, #241e1b);
+    --mc-banner-media: light-dark(#f3d1bd, #39261c);
+    --mc-skeleton: light-dark(#e7e5e4, #35353b);
+    --mc-danger: light-dark(#991b1b, #fca5a5);
+    --mc-danger-surface: light-dark(#fef2f2, #392126);
+    --mc-product-blend: normal;
+  }
+
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --mc-product-blend: multiply;
+  }
+  :root[data-theme="dark"] { color-scheme: dark; }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) { --mc-product-blend: multiply; }
+  }
   body { @apply bg-canvas text-ink antialiased; }
   :focus-visible { @apply outline-2 outline-offset-4 outline-action; }
 }
@@ -27,15 +71,99 @@
   .button {
     @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold motion-safe:transition-colors;
   }
-  .button-primary { @apply bg-action text-white hover:bg-orange-900; }
-  .button-secondary { @apply border border-line bg-white text-ink hover:border-orange-200 hover:bg-tint hover:text-action; }
+  .button-primary { @apply bg-action-bg text-on-action hover:bg-action-hover; }
+  .button-secondary { @apply border border-line bg-surface text-ink hover:border-accent hover:bg-tint hover:text-action; }
   .nav-link { @apply inline-flex min-h-11 items-center rounded-xl px-4 text-sm font-semibold text-muted hover:bg-canvas hover:text-ink; }
   .nav-link[aria-current="page"] { @apply bg-tint text-action; }
   .product-grid { @apply grid grid-cols-1 gap-5 min-[520px]:grid-cols-2 md:grid-cols-3; }
   .detail-grid { @apply grid items-start gap-6 md:grid-cols-2 lg:gap-10; }
-  .product-media { @apply relative min-w-0 bg-stone-100; }
-  .product-image { @apply absolute inset-0 h-full w-full object-contain mix-blend-multiply; }
-  .panel, .state-panel { @apply rounded-2xl border border-line bg-white; }
-  .field { @apply min-h-12 w-full min-w-0 rounded-xl border border-stone-400 bg-white px-3 text-sm; }
+  .product-media { @apply relative min-w-0 bg-surface-alt; }
+  .product-image {
+    @apply absolute inset-0 h-full w-full object-contain;
+    mix-blend-mode: var(--mc-product-blend);
+  }
+  .panel, .state-panel { @apply rounded-2xl border border-line bg-surface; }
+  .field { @apply min-h-12 w-full min-w-0 rounded-xl border border-line-strong bg-surface px-3 text-sm; }
   .state-panel { @apply flex flex-col items-start gap-3 p-5 sm:p-7; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .purchase-circle,
+  .purchase-check {
+    stroke-dasharray: 1;
+    animation: purchase-stroke 480ms ease-out both;
+  }
+
+  .purchase-check {
+    animation-duration: 380ms;
+    animation-delay: 340ms;
+  }
+
+  @keyframes purchase-stroke {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+}
+
+/* Classes passed through Sileo's public styles option. */
+html:root {
+  --sileo-state-success: light-dark(#166534, #86efac);
+  --sileo-state-info: light-dark(#075985, #7dd3fc);
+  --sileo-state-warning: var(--mc-action);
+  --sileo-state-error: var(--mc-danger);
+}
+
+.commerce-toast-title[data-state] {
+  color: var(--mc-ink);
+  text-transform: none;
+}
+.commerce-toast-description {
+  color: var(--mc-muted);
+}
+.commerce-toast-badge {
+  border: 1px solid var(--mc-line);
+  box-shadow: 0 0 0 1px var(--mc-accent);
+}
+
+@media (width < 374px) {
+  [data-sileo-viewport] {
+    /* Sileo 0.1.6 draws on a 350px SVG. Scale the viewport and its contents together. */
+    --commerce-toast-scale: tan(atan2(100vw - 24px, 350px));
+    max-width: none;
+    zoom: var(--commerce-toast-scale);
+  }
+
+  .commerce-toast-title[data-state] {
+    font-size: calc(0.825rem / var(--commerce-toast-scale));
+  }
+
+  .commerce-toast-description[data-sileo-description] {
+    font-size: calc(0.875rem / var(--commerce-toast-scale));
+    line-height: calc(1.25rem / var(--commerce-toast-scale));
+  }
+}
+
+.clear-cart-dialog::backdrop {
+  background-color: rgb(17 17 19 / 62%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .clear-cart-dialog {
+    opacity: 0;
+    transition: opacity 160ms ease, display 160ms allow-discrete, overlay 160ms allow-discrete;
+  }
+
+  .clear-cart-dialog[open] { opacity: 1; }
+
+  .clear-cart-dialog::backdrop {
+    opacity: 0;
+    transition: opacity 160ms ease, display 160ms allow-discrete, overlay 160ms allow-discrete;
+  }
+
+  .clear-cart-dialog[open]::backdrop { opacity: 1; }
+
+  @starting-style {
+    .clear-cart-dialog[open],
+    .clear-cart-dialog[open]::backdrop { opacity: 0; }
+  }
 }

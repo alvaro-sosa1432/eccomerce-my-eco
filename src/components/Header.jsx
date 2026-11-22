@@ -1,8 +1,8 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HamburgerMenu } from "./HamburgerMenu";
 
 export const Header = () => (
-  <header className="border-b border-line bg-white">
+  <header className="border-b border-line bg-surface">
     <div className="shell relative flex min-h-18 items-center justify-between gap-4">
       <Link to="/" className="flex min-h-11 items-center gap-2.5 rounded-xl font-bold tracking-tight">
         <span className="grid size-10 place-items-center rounded-xl bg-tint text-action">
@@ -12,10 +12,6 @@ export const Header = () => (
         </span>
         MyEccommerce
       </Link>
-      <nav aria-label="Navegación principal" className="hidden items-center gap-2 md:flex">
-        <NavLink to="/" end className="nav-link">Inicio</NavLink>
-        <NavLink to="/productlist" className="nav-link">Productos</NavLink>
-      </nav>
       <HamburgerMenu />
     </div>
   </header>

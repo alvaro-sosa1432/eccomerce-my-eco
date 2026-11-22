@@ -1,8 +1,10 @@
 import { ButtonDetails } from "./ButtonDetails";
+import { AddToCartButton } from "./AddToCartButton";
+import { WishlistButton } from "./WishlistButton";
 import { categoryLabel, formatPrice } from "../utils/products";
 
 export const CardProduct = ({ id, title, price, image, category }) => (
-  <article className="panel flex min-w-0 flex-col p-3 hover:border-stone-300 hover:shadow-sm motion-safe:transition-[border-color,box-shadow]">
+  <article className="panel flex min-w-0 flex-col p-3 hover:border-line-strong hover:shadow-sm motion-safe:transition-[border-color,box-shadow]">
     <div className="product-media aspect-[5/4] rounded-xl">
       <img
         className="product-image p-5 sm:p-7"
@@ -18,7 +20,11 @@ export const CardProduct = ({ id, title, price, image, category }) => (
       <p className="mb-1.5 text-xs font-semibold text-action">{categoryLabel(category)}</p>
       <h3 className="line-clamp-2 min-h-11 text-sm leading-[1.375rem] font-semibold wrap-anywhere" title={title}>{title}</h3>
       <p className="mt-3 mb-4 text-lg font-bold tracking-tight tabular-nums">{formatPrice(price)}</p>
-      <div className="mt-auto"><ButtonDetails id={id} title={title} /></div>
+      <div className="mt-auto flex flex-wrap items-center justify-between gap-2">
+        <div className="min-w-36 flex-1"><ButtonDetails id={id} title={title} /></div>
+        <WishlistButton productId={id} productTitle={title} />
+      </div>
+      <div className="mt-2"><AddToCartButton productId={id} productTitle={title} /></div>
     </div>
   </article>
 );
